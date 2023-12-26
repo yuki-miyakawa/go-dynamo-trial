@@ -1,0 +1,56 @@
+service: go-dynamo-trial
+
+provider:
+  name: aws
+  runtime: provided.al2
+  architecture: arm64
+  memorySize: 128
+  timeout: 10
+  region: ap-northeast-1
+  stage: ${opt:stage, 'dev'}
+  iam:
+      role:
+        statements:
+          - Effect: Allow
+            Action:
+              - 's3:GetObject'
+              - 's3:PutObject'
+            Resource: arn:aws:s3:::dev-go-dynamo-trial/*
+
+functions:
+  HealthCheck:
+    name: ${self:provider.stage}-${self:service}-healthcheck
+    handler: bootstrap
+    description: ヘルスチェック
+    package:
+      individually: true
+      artifact: bin/healthcheck.zip
+    events:
+      - http:
+          path: healthcheck
+          method: get
+          cors: true
+  MemoPost:
+    name: ${self:provider.stage}-${self:service}-memo-post
+    handler: bootstrap
+    description: メモのpost
+    package:
+      individually: true
+      artifact: bin/memo-post.zip
+    events:
+      - http:
+          path: memo/{memberId}
+          method: post
+          cors: true
+  MemoGet:
+    name: ${self:provider.stage}-${self:service}-memo-get
+    handler: bootstrap
+    description: メモのget
+    package:
+      individually: true
+      artifact: bin/memo-get.zip
+    events:
+      - http:
+          path: memo/{memberId}
+          method: get
+          cors: true

@@ -1,0 +1,16 @@
+{
+  "name": "go-dynamo-trial",
+  "repository": "https://github.com/y-miyakaw/go-dynamo-trial",
+  "author": "y-miyakawa@tribeat.com <y-miyakawa@tribeat.com>",
+  "license": "MIT",
+  "dependencies": {
+    "serverless": "^3.38.0"
+  },
+  "scripts": {
+    "build": "bash build.sh",
+    "deploy:dev": "sls deploy --verbose --stage=dev"
+  },
+  "dependencies": {
+    "serverless": "^2.55.0"
+  }
+}
